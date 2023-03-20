@@ -84,6 +84,7 @@ def check_login(username,password):
         return User.query.filter(User.username.__eq__(username.strip()),
                                  User.password.__eq__(password)).first()
 
+
 def check_user(username,password,role=UserRole.USER):
     password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
     return User.query.filter(User.username.__eq__(username.strip()),
