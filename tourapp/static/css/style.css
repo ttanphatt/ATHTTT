@@ -789,8 +789,14 @@ ul.hotro1 >li{
     color: #FF0000;
 }
 
+.quenmatkhau{
+    text-align:center;
+    padding-top:20px;
 
-
+}
+.quenmatkhau a{
+    color:#014C8E;
+}
 
 
 

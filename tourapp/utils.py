@@ -1,11 +1,12 @@
 import json, os
+from tourapp import app, db
+from tourapp.models import Category, Product, User, UserRole, Bill
+import hashlib # băm pass word
 
-
-from tourapp import app,db
-from tourapp.models import Category, Product,User,UserRole,Bill
-import hashlib
-# băm pass word
-
+from functools import wraps
+from flask_login import current_user
+from flask import redirect
+from sqlalchemy import func, extract
 
 def read_json(path):
     with open(path, "r") as f:
@@ -67,6 +68,7 @@ def add_bill(name, email, amount_big, amount_young, phone, address, cccd, total,
     db.session.add(user)
     db.session.commit()
 
+
 def add_user(name, username, password, **kwargs):
     password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
     user = User(name=name.strip(),
@@ -76,8 +78,8 @@ def add_user(name, username, password, **kwargs):
     db.session.add(user)
     db.session.commit()
 
-def check_login(username,password):
 
+def check_login(username, password):
     if username and password:
         password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
 
@@ -85,10 +87,56 @@ def check_login(username,password):
                                  User.password.__eq__(password)).first()
 
 
-def check_user(username,password,role=UserRole.USER):
+def check_user(username, password, role=UserRole.USER):
     password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
     return User.query.filter(User.username.__eq__(username.strip()),
-                                 User.password.__eq__(password),
+                             User.password.__eq__(password),
                              User.user_role.__eq__(role)).first()
+
+
 def get_user_by_id(user_id):
     return User.query.get(user_id)
+
+
+def anmonymous_user(f):
+    @wraps(f)
+    def decorated_func(*args, **kwargs):
+        if current_user.is_authenticated:
+            return redirect('/')
+        return f(*args, **kwargs)
+
+    return decorated_func
+
+
+def stats_revenue(month = None):
+    query = db.session.query(Bill.pay_date,Product.name, func.sum(Bill.total))\
+                      .join(Bill, Bill.product_id.__eq__(Product.id))
+
+    if month:
+        query = query.filter(extract('month', Bill.pay_date).__eq__(month))
+
+    return query.group_by(Bill.pay_date, Product.name).all()
+
+
+def total_revenue(month = None):
+    query = db.session.query(func.sum(Bill.total))
+
+    if month:
+        query = query.filter(extract('month', Bill.pay_date).__eq__(month))
+
+    return query.all()
+
+
+def count_tour_by_cate(month = None):
+    query = db.session.query(Product.name,Product.price_big, func.count(Bill.product_id))\
+            .join(Bill, Bill.product_id.__eq__(Product.id), isouter=True)
+    if month:
+        query = query.filter(extract('month', Bill.pay_date).__eq__(month))
+
+    return query.group_by(Product.name, Product.price_big).all()
+
+
+def update_pass(username,p):
+    p = str(hashlib.md5(p.strip().encode('utf-8')).hexdigest())
+    User.query.filter_by(username=username).first().password = p
+    db.session.commit()

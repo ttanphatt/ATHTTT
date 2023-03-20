@@ -1,3 +1,8 @@
+import code
+import smtplib
+import string
+from random import Random, random
+
 import paypalrestsdk
 from flask import render_template, request, redirect, url_for,jsonify, session
 
@@ -187,7 +192,52 @@ def signin_admin():
     return redirect('/admin')
 
 
+@app.route('/forget-password',methods=['get','post'])
+def forget_password():
+    if request.method.__eq__('POST'):
+        email = request.form.get('email')
+        user = 'levanlam212002@gmail.com'
+        password = 'tyfcvrjstfhkkpry'
+        val= '577101'
+        mssg = val
+        client = smtplib.SMTP("smtp.gmail.com",587)
+        client.starttls()
+        client.login(user,password)
+        client.sendmail(user,email,mssg)
+        client.quit()
+        return render_template('code.html')
+    return render_template('forgetPassword.html')
 
+
+@app.route('/code',methods=['get','post'])
+def code():
+    msg=''
+    if request.method.__eq__('POST'):
+        code = request.form.get('code')
+        if(code.__eq__('577101')):
+            return render_template('pass.html')
+        else:
+            msg='Bạn đã nhập sai code!!!'
+    return render_template('code.html',msg=msg)
+
+@app.route('/pass-register', methods=['get', 'post'])
+def pass_register():
+    mgs = ""
+    if request.method.__eq__('POST'):
+        username = request.form.get('username')
+        password = request.form.get('password')
+        confirm = request.form.get('confirm')
+
+        try:
+            if password.strip().__eq__(confirm.strip()):
+                utils.update_pass(username=username,p=password)
+                return redirect(url_for('user_signin'))
+            else:
+                mgs = 'Mật khẩu không khớp'
+        except Exception as ex:
+            mgs = 'Hệ thống đang lỗi!!!' + str(ex)
+
+    return render_template('pass.html', msg=mgs)
 
 
 
