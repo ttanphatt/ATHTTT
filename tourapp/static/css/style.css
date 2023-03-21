@@ -290,6 +290,7 @@ ul.col-12 {
 .head .checked{
     padding-right: 20px;
     font-size: 20px;
+    color: #0066d9;
 }
 
 .card-a{
@@ -312,11 +313,15 @@ ul.col-12 {
 }
 .d-none, .payment-warp > h3{
     font-weight: 700;
+    text-align:center;
     margin-bottom: 30px;
 }
 .description > h3{
+    text-align:center;
     font-weight: 600;
     margin-bottom: 15px;
+    color: red;
+    font-size:20px
 }
 .dt-start, .dt-end, .customer-pay, .sum-tour{
     display: flex;
@@ -477,7 +482,25 @@ div.sp1 >div{
     transition: 0.3s;
 }
 
+/* css lich su dat hang */
+.tableStyle {
+    border: none;
+    width: 100%;
 
+}
+.tableStyle th {
+    background-color: #cad8fa;
+    padding: 5px;
+    text-align:center;
+}
+.tableStyle td {
+    background-color: #F8F8FF;
+    padding: 5px;
+    text-align:center;
+}
+.lsthanhtoan{
+    padding:30px 50px 50px 50px;
+}
 
 
 

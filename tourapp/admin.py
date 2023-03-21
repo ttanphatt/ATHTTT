@@ -6,7 +6,7 @@ from flask import request
 from tourapp import app, db, utils
 from tourapp.models import Product, Category,UserRole
 
-admin = Admin(app=app, name="Admin hello", template_mode='bootstrap4')
+admin = Admin(app=app, name="VIETNAM BOOKING", template_mode='bootstrap4')
 
 
 class AuthenticatedModelView(ModelView):
@@ -44,8 +44,9 @@ class TourView(BaseView):
         stats = utils.count_tour_by_cate(month=request.args.get('month'))
         return self.render('admin/tour.html', stats=stats)
 
-admin.add_view(AuthenticatedModelView(Category, db.session))
-admin.add_view(ProductView(Product, db.session))
-admin.add_view(LogoutView(name='Logout'))
+admin.add_view(AuthenticatedModelView(Category, db.session,name='Vùng miền'))
+admin.add_view(ProductView(Product, db.session,name='Tour du lịch'))
 admin.add_view(StatsView(name='Thống kê doanh thu'))
 admin.add_view(TourView(name='Thống kê Tour'))
+admin.add_view(LogoutView(name='Logout'))
+

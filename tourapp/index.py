@@ -59,6 +59,7 @@ def payment(product_id):
         address = request.form['address']
         cccd = request.form['cccd']
         product_id = product_id
+        user_id = current_user.id
         pay_date = request.form['pay_date']
         price_big = request.form['price_big']
         price_young = request.form['price_young']
@@ -102,6 +103,7 @@ def payment(product_id):
                                        cccd=cccd,
                                        product_id=product_id,
                                        pay_date=pay_date,
+                                       user_id=user_id,
                                        total=session['price'])
                         msg = 'Thanh cong'
                     except:
@@ -125,6 +127,14 @@ def success():
         return redirect(url_for('home'))
     else:
         return "Lỗi trong quá trình xác nhận thanh toán"
+
+@app.route('/pay_history/<int:user_id>')
+def pay_history(user_id):
+    bills = utils.get_bill_by_user_id(user_id=user_id)
+    return render_template('pay_history.html', bills=bills)
+
+
+
 
 
 @app.route('/register', methods=['get', 'post'])

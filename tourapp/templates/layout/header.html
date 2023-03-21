@@ -97,15 +97,18 @@
 
                 {% if current_user.is_authenticated %}
                 <div class="userlogin">
+
                     <li class="sub">
-                        <a href="{{ url_for('home') }}"><i class="fas fa-solid fa-user"></i> {{ current_user.username }}</a>
+                        <a href="#"><i class="fas fa-solid fa-user"></i> {{ current_user.username }}</a>
+                    </li>
+                    <li class="sub">
+                        <a href="{{ url_for('pay_history', user_id=current_user.id) }}">Lịch sử thanh toán</a>
                     </li>
 
                     <li class="sub">
                         <a href="{{ url_for('user_signout') }}">Đăng xuất</a>
                     </li>
                 </div>
-
                 {% else %}
 
                 <li class="sub">

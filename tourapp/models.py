@@ -3,28 +3,33 @@ from sqlalchemy.orm import relationship
 from tourapp import db, app
 from datetime import datetime
 from flask_login import UserMixin
-from  enum import Enum as UserEnum
+from enum import Enum as UserEnum
+
 
 class BaseModel(db.Model):
     __abstract__ = True
 
     id = Column(Integer, primary_key=True, autoincrement=True)
 
+
 class UserRole(UserEnum):
     ADMIN = 1
     USER = 2
 
-class User(BaseModel,UserMixin):
-    name = Column(String(50),nullable=False)
+
+class User(BaseModel, UserMixin):
+    name = Column(String(50), nullable=False)
     username = Column(String(50), nullable=False, unique=True)
-    password = Column(String(50), nullable= False)
+    password = Column(String(50), nullable=False)
     email = Column(String(50))
     active = Column(Boolean, default=True)
     joined_date = Column(DateTime, default=datetime.now())
     user_role = Column(Enum(UserRole), default=UserRole.USER)
+    Bill = relationship('Bill', backref='user', lazy=False)
 
     def __str__(self):
         return self.name
+
 
 class Category(BaseModel):
     __tablename__ = 'category'
@@ -59,7 +64,7 @@ class Product(BaseModel):
 
 
 class Bill(BaseModel):
-    _tablename_ = 'bill'
+    tablename = 'bill'
 
     name = Column(String(255))
     email = Column(String(255))
@@ -69,82 +74,136 @@ class Bill(BaseModel):
     address = Column(String(255))
     cccd = Column(Integer)
     pay_date = Column(Date)
+    active = Column(Boolean, default=True)
     product_id = Column(Integer, ForeignKey(Product.id), nullable=False)
+    user_id = Column(Integer, ForeignKey(User.id), nullable=False)
     total = Column(Integer)
 
     def __str__(self):
         return self.name
 
+
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
-        # c1 = Category(name='MIỀN BẮC')
-        # c2 = Category(name='MIỀN NAM')
-        # c3 = Category(name='MIỀN TRUNG')
+        c1 = Category(name='MIỀN BẮC')
+        c2 = Category(name='MIỀN TRUNG')
+        c3 = Category(name='MIỀN NAM')
+
+        db.session.add_all([c1, c2, c3])
+
+        p1 = Product(name="DU LỊCH ĐẢO PHÚ QUỐC", time="3 ngày 3 đêm", price_big=398, price_small=241,
+                     datetime_start="2023-03-09", datetime_end="2023-03-13", go_start="TP. Hồ Chí Minh",
+                     go_end="Phú Quốc", vehicle="Máy bay", image="images/anh1.jpg", category_id=3)
+
+        p2 = Product(name="DU LỊCH ĐÀ NẴNG", time="3 ngày 2 đêm", price_big=279, price_small=173,
+                     datetime_start="2023-03-09", datetime_end="2023-03-12", go_start="TP. Hồ Chí Minh",
+                     go_end="Đà Nẵng", vehicle="Máy bay", image="images/anh2.jpg",
+                     category_id=2)
+
+        p3 = Product(name="DU LỊCH ĐÀ LẠT", time="3 ngày 2 đêm", price_big=97, price_small=67,
+                     datetime_start="2023-03-09", datetime_end="2023-03-13", go_start="TP. Hồ Chí Minh",
+                     go_end="Đà Lạt", vehicle="Ôtô", image="images/anh3.png", category_id=2)
+
+        p4 = Product(name="DU LỊCH SAPA", time="4 ngày 3 đêm", price_big=424, price_small=305,
+                     datetime_start="2023-03-10", datetime_end="2023-03-14", go_start="TP. Hồ Chí Minh",
+                     go_end="Điện Biên - SaPa", vehicle="Máy bay",
+                     image="images/anh4.jpg", category_id=1)
+
+        p5 = Product(name="DU LỊCH NHA TRANG", time="3 ngày 2 đêm", price_big=106, price_small=67,
+                     datetime_start="2023-03-11", datetime_end="2023-03-13", go_start="TP. Hồ Chí Minh",
+                     go_end="Nha Trang", vehicle="Máy bay",
+                     image="images/anh5.jpg", category_id=2)
+
+        p6 = Product(name="DU LỊCH HẠ LONG", time="2 ngày 1 đêm", price_big=206, price_small=106,
+                     datetime_start="2023-03-14", datetime_end="2023-03-17", go_start="TP. Hồ Chí Minh",
+                     go_end="Hạ Long", vehicle="Máy bay",
+                     image="images/anh6.jpg", category_id=1)
+
+        p7 = Product(name="DU LỊCH PHÚ YÊN", time="3 ngày 3 đêm", price_big=228, price_small=161,
+                     datetime_start="2023-03-15", datetime_end="2023-03-19", go_start="TP. Hồ Chí Minh",
+                     go_end="Phú Yên - Tuy Hòa", vehicle="Máy bay",
+                     image="images/anh7.jpg", category_id=3)
+
+        p8 = Product(name="DU LỊCH HUẾ", time="4 ngày 3 đêm", price_big=678, price_small=466,
+                     datetime_start="2023-03-15", datetime_end="2023-03-21", go_start="TP. Hồ Chí Minh",
+                     go_end="Huế", vehicle="Máy bay",
+                     image="images/anh8.jpg", category_id=2)
+
+        p9 = Product(name="DU LỊCH TÂY NGUYÊN", time="3 ngày 2 đêm", price_big=220, price_small=156,
+                     datetime_start="2023-03-15", datetime_end="2023-03-19", go_start="TP. Hồ Chí Minh",
+                     go_end="Tây Nguyên", vehicle="Máy bay",
+                     image="images/anh9.jpg", category_id=2)
+
+        p10 = Product(name="DU LỊCH MỸ THO", time="2 ngày 1 đêm", price_big=80, price_small=67,
+                      datetime_start="2023-03-15", datetime_end="2023-03-18", go_start="TP. Hồ Chí Minh",
+                      go_end="Mỹ Tho", vehicle="Ôtô",
+                      image="images/anh10.jpg", category_id=3)
+
+        p11 = Product(name="DU LỊCH HỘI AN", time="4 ngày 3 đêm", price_big=212, price_small=114,
+                      datetime_start="2023-03-15", datetime_end="2023-03-20", go_start="TP. Hồ Chí Minh",
+                      go_end="Hội An - Đà Nẵng", vehicle="Máy bay",
+                      image="images/anh11.jpg", category_id=2)
+
+        p12 = Product(name="DU LỊCH HÀ GIANG", time="4 ngày 3 đêm", price_big=339, price_small=254,
+                      datetime_start="2023-03-15", datetime_end="2023-03-20", go_start="TP. Hồ Chí Minh",
+                      go_end="Hà Giang", vehicle="Máy bay",
+                      image="images/anh12.jpg", category_id=1)
+        p13 = Product(name="DU LỊCH HÀ NỘI", time="4 ngày 3 đêm", price_big=114, price_small=106,
+                      datetime_start="2023-03-15", datetime_end="2023-03-20", go_start="TP. Hồ Chí Minh",
+                      go_end="Hà Nội", vehicle="Máy bay",
+                      image="images/anh14.jpg", category_id=1)
+        p14 = Product(name="DU LỊCH CẦN THƠ", time="2 ngày 1 đêm", price_big=106, price_small=63,
+                      datetime_start="2023-03-15", datetime_end="2023-03-18", go_start="TP. Hồ Chí Minh",
+                      go_end="Cần Thơ", vehicle="Ôtô",
+                      image="images/anh13.jpg", category_id=3)
+        p15 = Product(name="DU LỊCH BẮC NINH", time="4 ngày 3 đêm", price_big=180, price_small=152,
+                      datetime_start="2023-03-15", datetime_end="2023-03-20", go_start="TP. Hồ Chí Minh",
+                      go_end="Bắc Ninh", vehicle="Máy bay",
+                      image="images/anh15.jpg", category_id=1)
+        db.session.add_all([p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15])
+        db.session.commit()
+
+
+
+        tk user (pass: 123)
+        u1 = User(name='Huỳnh Minh Hoàng', username='hoang', password='202cb962ac59075b964b07152d234b70', email='2051052046hoang@ou.edu.vn')
+        u2 = User(name='Thái Tấn Phát', username='phat', password='202cb962ac59075b964b07152d234b70',email='phattan@ou.edu.vn')
+        u3 = User(name='Lê Văn Lâm', username='lam', password='202cb962ac59075b964b07152d234b70',email='levanlam@ou.edu.vn')
+        u4 = User(name='Nguyễn Thị Ngọc Yến', username='yen', password='202cb962ac59075b964b07152d234b70',email='ngocyennguyen@ou.edu.vn')
+        u5 = User(name='Nguyễn Thị Thanh', username='thanh', password='202cb962ac59075b964b07152d234b70',email='thanhjenny@ou.edu.vn')
+        u6 = User(name='Phan Thị Yến Vi', username='vi', password='202cb962ac59075b964b07152d234b70',email='yenviphan@ou.edu.vn')
+        u7 = User(name='Nguyễn Toàn Mỹ', username='my', password='202cb962ac59075b964b07152d234b70',email='mynguyen@ou.edu.vn')
+
+        #tk admin (pass: 123)
+        u8 = User(name='Admin', username='admin', password='202cb962ac59075b964b07152d234b70', email='admin@ou.edu.vn', user_role='ADMIN')
+        db.session.add_all([u1, u2, u3, u4, u5, u6, u7, u8])
+        db.session.commit()
+
+
+
+        #tạo cuối cùng ( tạo user trên xong mới tạo bill)
+
+        # b1 = Bill(name="Huỳnh Minh Hoàng", email="2051052046hoang@ou.edu.vn", amount_big=3, amount_young=2, phone="0364121547",
+        #           address="635 Phan Văn Trị, P7, Gò Vấp, Thành Phố Hồ Chí Minh", cccd="231417171", pay_date="2023-02-20", total=1183, product_id=2, user_id=1)
         #
-        # db.session.add_all([c1,c2,c3])
+        # b2 = Bill(name="Thái Tấn Phát", email="phattan@ou.edu.vn", amount_big=2, amount_young=3, phone="096548745",
+        #           address="81 Thống Nhất, P11, Gò Vấp, Thành Phố Hồ Chí Minh", cccd="214585214", pay_date="2023-01-12", total=939, product_id=7, user_id=2)
         #
-        # p1 = Product(name="DU LỊCH ĐẢO PHÚ QUỐC", time="4 ngày 3 đêm", price_big=7779, price_small=3889,
-        #              datetime_start="2023-03-09", datetime_end="2023-03-13", go_start="TP. Hồ Chí Minh",
-        #              go_end="Đà lạt", vehicle="Đi về bằng xe", image="images/anh1.jpg", category_id=1)
+        # b3 = Bill(name="Lê Văn Lâm", email="levanlam@ou.edu.vn", amount_big=4, amount_young=4, phone="0966287704",
+        #           address="89/23 Lê Thị Hồng, P3, Gò Vấp, Thành Phố Hồ Chí Minh", cccd="231415857", pay_date="2023-02-21", total=639, product_id=1, user_id=3)
         #
-        # p2 = Product(name="DU LỊCH ĐÀ NẴNG", time="2 ngày 2 đêm", price_big=4079, price_small=2040,
-        #              datetime_start="2023-03-09", datetime_end="2023-03-13", go_start="TP. Hồ Chí Minh",
-        #              go_end="Nha Trang", vehicle="Đi về bằng xe", image="images/anh2.jpg",
-        #              category_id=2)
+        # b4 = Bill(name="Nguyễn Thị Ngọc Yến", email="ngocyennguyen@ou.edu.vn", amount_big=10, amount_young=6, phone="01662458451",
+        #           address="8929 Vườn Lài, P5, Quận 12, Thành Phố Hồ Chí Minh", cccd="236585214", pay_date="2023-02-21", total=6070, product_id=4, user_id=4)
         #
-        # p3 = Product(name="DU LỊCH ĐÀ LẠT", time="3 ngày 3 đêm", price_big=47790, price_small=2390,
-        #              datetime_start="2023-03-09", datetime_end="2023-03-13", go_start="TP. Hồ Chí Minh",
-        #              go_end="Miền Tây", vehicle="Đi về bằng xe", image="images/anh3.png", category_id=3)
+        # b5 = Bill(name="Nguyễn Thị Thanh", email="thanhjenny@ou.edu.vn", amount_big=3, amount_young=1, phone="0954781452",
+        #           address="1054 Quang Trung, P15, Gò Vấp, Thành Phố Hồ Chí Minh", cccd="202145281", pay_date="2023-01-08", total=358, product_id=3, user_id=5)
         #
-        # p4 = Product(name="DU LỊCH SAPA", time="2 ngày 1 đêm", price_big=5779, price_small=3260,
-        #              datetime_start="2023-03-10", datetime_end="2023-03-13", go_start="TP. Hồ Chí Minh",
-        #              go_end="Hội An - Đà Nẵng", vehicle="Hàng không Vietname Aỉlines",
-        #              image="images/anh4.jpg", category_id=1)
+        # b6 = Bill(name="Phan Thị Yến Vi", email="yenviphan@ou.edu.vn", amount_big=10, amount_young=3, phone="0166875474",
+        #           address="84/21 Cách Mạng Tháng 8, P1, Quận 10, Thành Phố Hồ Chí Minh", cccd="254175845", pay_date="2023-01-01", total=1001, product_id=10, user_id=6)
         #
-        # p5 = Product(name="DU LỊCH NHA TRANG", time="2 ngày 3 đêm", price_big=3779, price_small=1890,
-        #              datetime_start="2023-03-11", datetime_end="2023-03-14", go_start="TP. Hồ Chí Minh",
-        #              go_end="Đà Lạt", vehicle="Đi về bằng xe",
-        #              image="images/anh5.jpg", category_id=2)
+        # b7 = Bill(name="Nguyễn Toàn Mỹ", email="mynguyen@ou.edu.vn", amount_big=2, amount_young=4, phone="0165485741",
+        #           address="32/12 Nguyễn Thái Sơn, P3, Gò Vấp, Thành Phố Hồ Chí Minh", cccd="236598541", pay_date="2023-01-05", total=464, product_id=14, user_id=7)
         #
-        # p6 = Product(name="DU LỊCH HẠ LONG", time="3 ngày 2 đêm", price_big=4339, price_small=3120,
-        #              datetime_start="2023-03-14", datetime_end="2023-03-17", go_start="TP. Hồ Chí Minh",
-        #              go_end="Phú Quốc", vehicle="Hàng không Vietname Aỉlines",
-        #              image="images/anh6.jpg", category_id=3)
-        #
-        # p7 = Product(name="DU LỊCH PHÚ YÊN", time="2 ngày 3 đêm", price_big=2779, price_small=1990,
-        #              datetime_start="2023-03-15", datetime_end="2023-03-20", go_start="TP. Hồ Chí Minh",
-        #              go_end="Đà Lạt", vehicle="Đi về bằng xe",
-        #              image="images/anh7.jpg", category_id=1)
-        #
-        # p8 = Product(name="DU LỊCH HUẾ", time="3 ngày 4 đêm", price_big=4779, price_small=2990,
-        #              datetime_start="2023-03-15", datetime_end="2023-03-20", go_start="TP. Hồ Chí Minh",
-        #              go_end="Đà Lạt", vehicle="Đi về bằng xe",
-        #              image="images/anh8.jpg", category_id=2)
-        #
-        # p9 = Product(name="DU LỊCH TÂY NGUYÊN", time="4 ngày 5 đêm", price_big=5779, price_small=3990,
-        #              datetime_start="2023-03-15", datetime_end="2023-03-20", go_start="TP. Hồ Chí Minh",
-        #              go_end="Đà Lạt", vehicle="Đi về bằng xe",
-        #              image="images/anh9.jpg", category_id=3)
-        #
-        # p10 = Product(name="DU LỊCH MỸ THO", time="2 ngày 1 đêm", price_big=2779, price_small=1990,
-        #              datetime_start="2023-03-15", datetime_end="2023-03-20", go_start="TP. Hồ Chí Minh",
-        #              go_end="Đà Lạt", vehicle="Đi về bằng xe",
-        #              image="images/anh10.jpg", category_id=1)
-        #
-        # p11 = Product(name="DU LỊCH HỘI AN", time="2 ngày 1 đêm", price_big=2290, price_small=1290,
-        #               datetime_start="2023-03-15", datetime_end="2023-03-20", go_start="TP. Hồ Chí Minh",
-        #               go_end="Đà Lạt", vehicle="Đi về bằng xe",
-        #               image="images/anh11.jpg", category_id=1)
-        #
-        # p12 = Product(name="DU LỊCH HÀ GIANG", time="3 ngày 2 đêm", price_big=4290, price_small=2290,
-        #               datetime_start="2023-03-15", datetime_end="2023-03-20", go_start="TP. Hồ Chí Minh",
-        #               go_end="Đà Lạt", vehicle="Đi về bằng xe",
-        #               image="images/anh12.jpg", category_id=1)
-        # db.session.add_all([p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12])
-        # db.session.commit()
-        # b1 = Bill(name="Lê Văn Lâm", email="levanlam@ou.edu.vn",amount_young=7,phone="0966287704",address="8929 vườn Lài",cccd="28218",pay_date=datetime.now(),total=7500,product_id=1)
-        # b2 = Bill(name="Huỳnh Minh Hoàng", email="hmh20172018@ou.edu.vn", amount_young=6, phone="0364121547",address="635 Phan Văn Trị", cccd="21547",pay_date=datetime.now(), total=5000, product_id=2)
-        # b3= Bill(name="Lê Văn Lâm", email="levanlam@ou.edu.vn", amount_young=2, phone="0966287704",address="8929 vườn Lài", cccd="28218",pay_date=datetime.now(), total=9500, product_id=1)
-        # db.session.add_all([b1,b2,b3])
+        # db.session.add_all([b1, b2, b3, b4, b5, b6, b7])
         # db.session.commit()

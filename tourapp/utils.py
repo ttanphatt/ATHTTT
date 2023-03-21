@@ -53,7 +53,7 @@ def get_product_by_id(product_id):
     # return None
 
 
-def add_bill(name, email, amount_big, amount_young, phone, address, cccd, total, pay_date, product_id):
+def add_bill(name, email, amount_big, amount_young, phone, address, cccd, total, pay_date, product_id, user_id):
     user = Bill(name=name.strip(),
                 email=email.strip(),
                 amount_big=amount_big.strip(),
@@ -63,10 +63,19 @@ def add_bill(name, email, amount_big, amount_young, phone, address, cccd, total,
                 cccd=cccd.strip(),
                 product_id=product_id.strip(),
                 total=total,
-                pay_date=pay_date)
+                pay_date=pay_date,
+                user_id=user_id)
 
     db.session.add(user)
     db.session.commit()
+
+
+def get_bill_by_user_id(user_id):
+    bills = Bill.query.filter(Bill.active.__eq__(True))
+
+    if user_id:
+        bills = bills.filter(Bill.user_id.__eq__(user_id))
+    return bills
 
 
 def add_user(name, username, password, **kwargs):
