@@ -165,7 +165,7 @@ if __name__ == '__main__':
         # db.session.commit()
         #
         #
-        # u1 = User(name='Hoàng', username='hoang', password='202cb962ac59075b964b07152d234b70', email='201720218@gmail.com')
+        # u1 = User(name='Hoàng', username='hoang', password='202cb962ac59075b964b07152d234b70', email='20172023218@gmail.com')
         # u2 = User(name='Thái Tấn Phát', username='phat', password='202cb962ac59075b964b07152d234b70',email='phattan@ou.edu.vn')
         # u3 = User(name='Lê Văn Lâm', username='lam', password='202cb962ac59075b964b07152d234b70',email='levanlam@ou.edu.vn')
         # u4 = User(name='Nguyễn Thị Ngọc Yến', username='yen', password='202cb962ac59075b964b07152d234b70',email='ngocyennguyen@ou.edu.vn')
