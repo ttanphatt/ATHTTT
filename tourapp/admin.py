@@ -21,6 +21,12 @@ class ProductView(AuthenticatedModelView):
     column_searchable_list = ['name', 'time']
     column_filters = ['name', 'price_big', 'price_small']
 
+class BillView(AuthenticatedModelView):
+    can_view_details = True
+    can_export = True
+    column_searchable_list = ['name', 'cccd', 'phone']
+    column_filters = ['total', 'pay_date']
+
 
 class LogoutView(BaseView):
     @expose('/')
@@ -46,7 +52,7 @@ class TourView(BaseView):
 
 admin.add_view(AuthenticatedModelView(Category, db.session,name='Vùng miền'))
 admin.add_view(ProductView(Product, db.session,name='Tour du lịch'))
-admin.add_view(ModelView(Bill, db.session, name='Hóa đơn'))
+admin.add_view(BillView(Bill, db.session, name='Hóa đơn'))
 admin.add_view(StatsView(name='Thống kê doanh thu'))
 admin.add_view(TourView(name='Thống kê Tour'))
 admin.add_view(LogoutView(name='Logout'))

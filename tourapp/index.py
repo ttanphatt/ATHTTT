@@ -206,9 +206,9 @@ def signin_admin():
 def forget_password():
     if request.method.__eq__('POST'):
         email = request.form.get('email')
-        user = 'levanlam212002@gmail.com'
-        password = 'tyfcvrjstfhkkpry'
-        val= '577101'
+        user = 'thanhtoanpaypalonline@gmail.com'
+        password = 'kdgfnhszhmlisgfk'
+        val= '518751'
         mssg = val
         client = smtplib.SMTP("smtp.gmail.com",587)
         client.starttls()
