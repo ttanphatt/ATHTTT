@@ -224,7 +224,7 @@ def code():
     msg=''
     if request.method.__eq__('POST'):
         code = request.form.get('code')
-        if(code.__eq__('577101')):
+        if(code.__eq__('518751')):
             return render_template('pass.html')
         else:
             msg='Bạn đã nhập sai code!!!'
@@ -247,7 +247,7 @@ def pass_register():
         except Exception as ex:
             mgs = 'Hệ thống đang lỗi!!!' + str(ex)
 
-    return render_template('pass.html', msg=mgs)
+    return render_template('pass.html', mgs=mgs)
 
 
 

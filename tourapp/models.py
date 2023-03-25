@@ -180,22 +180,22 @@ if __name__ == '__main__':
         b1 = Bill(name="Minh Hoàng", email="2011172018@gmail.com", amount_big=2, amount_young=1, phone="0364121547",
                   address="635 Phan Văn Trị, P7, Gò Vấp, Thành Phố Hồ Chí Minh", cccd="231417171", pay_date="2023-02-20", total=452, product_id=2, user_id=1)
 
-        b2 = Bill(name="Thái Tấn Phát", email="phattan@ou.edu.vn", amount_big=2, amount_young=3, phone="096548745",
+        b2 = Bill(name="Thái Tấn Phát", email="ph345345attan@ou.edu.vn", amount_big=2, amount_young=3, phone="096548745",
                   address="81 Thống Nhất, P11, Gò Vấp, Thành Phố Hồ Chí Minh", cccd="214585214", pay_date="2023-01-12", total=939, product_id=7, user_id=2)
 
-        b3 = Bill(name="Lê Văn Lâm", email="levanlam@ou.edu.vn", amount_big=4, amount_young=4, phone="0966287704",
+        b3 = Bill(name="Lê Văn Lâm", email="levanl345345am@ou.edu.vn", amount_big=4, amount_young=4, phone="0966287704",
                   address="89/23 Lê Thị Hồng, P3, Gò Vấp, Thành Phố Hồ Chí Minh", cccd="231415857", pay_date="2023-02-21", total=639, product_id=1, user_id=3)
 
-        b4 = Bill(name="Nguyễn Thị Ngọc Yến", email="ngocyennguyen@ou.edu.vn", amount_big=10, amount_young=6, phone="01662458451",
+        b4 = Bill(name="Nguyễn Thị Ngọc Yến", email="ngocy345345ennguyen@ou.edu.vn", amount_big=10, amount_young=6, phone="01662458451",
                   address="8929 Vườn Lài, P5, Quận 12, Thành Phố Hồ Chí Minh", cccd="236585214", pay_date="2023-02-21", total=6070, product_id=4, user_id=4)
 
-        b5 = Bill(name="Nguyễn Thị Thanh", email="thanhjenny@ou.edu.vn", amount_big=3, amount_young=1, phone="0954781452",
+        b5 = Bill(name="Nguyễn Thị Thanh", email="thanhje345435nny@ou.edu.vn", amount_big=3, amount_young=1, phone="0954781452",
                   address="1054 Quang Trung, P15, Gò Vấp, Thành Phố Hồ Chí Minh", cccd="202145281", pay_date="2023-01-08", total=358, product_id=3, user_id=5)
 
-        b6 = Bill(name="Phan Thị Yến Vi", email="yenviphan@ou.edu.vn", amount_big=10, amount_young=3, phone="0166875474",
+        b6 = Bill(name="Phan Thị Yến Vi", email="yenvi345345phan@ou.edu.vn", amount_big=10, amount_young=3, phone="0166875474",
                   address="84/21 Cách Mạng Tháng 8, P1, Quận 10, Thành Phố Hồ Chí Minh", cccd="254175845", pay_date="2023-01-01", total=1001, product_id=10, user_id=6)
 
-        b7 = Bill(name="Nguyễn Toàn Mỹ", email="mynguyen@ou.edu.vn", amount_big=2, amount_young=4, phone="0165485741",
+        b7 = Bill(name="Nguyễn Toàn Mỹ", email="mynguy345345en@ou.edu.vn", amount_big=2, amount_young=4, phone="0165485741",
                   address="32/12 Nguyễn Thái Sơn, P3, Gò Vấp, Thành Phố Hồ Chí Minh", cccd="236598541", pay_date="2023-01-05", total=464, product_id=14, user_id=7)
 
         db.session.add_all([b1, b2, b3, b4, b5, b6, b7])
